@@ -343,8 +343,7 @@
         <div class="my-auto flex flex-col items-center w-full py-4">
           <div class="w-full rounded-2xl bg-rose-950/60 border border-amber-300/20 p-6 text-left relative">
             <div class="text-3xl text-amber-300/80 font-display leading-none mb-2">“</div>
-            <p id="final-note-p1" class="text-sm sm:text-[15px] text-rose-50/95 leading-relaxed mb-4 min-h-[88px]"></p>
-            <p id="final-note-p2" class="text-sm sm:text-[15px] text-rose-100/90 leading-relaxed mb-5 min-h-[24px]"></p>
+            <p id="final-note-body" class="text-sm sm:text-[15px] text-rose-50/95 leading-relaxed mb-5 min-h-[180px] whitespace-pre-line"></p>
             <div class="border-t border-rose-200/15 pt-3 flex items-center justify-between">
               <span class="text-xs font-semibold text-amber-200">— Your Facebook Friend</span>
               <span class="text-xs text-rose-300 font-medium">Happy Birthday 🎂</span>
@@ -377,7 +376,7 @@
   </main>
 
   <!-- DEDICATED BIRTHDAY SONG FILE: Replace the empty src="" below with your song file path (e.g. src="babli_song.mp3") -->
-  <audio id="birthday-song" preload="auto" src="Khushiyon_Ki_Saugat.mp3"></audio>
+  <audio id="birthday-song" preload="auto" src=""></audio>
 
   <script>
     (function () {
@@ -526,24 +525,23 @@
       document.getElementById("replay-wish-btn").addEventListener("click", revealWishLines);
 
       // ---------- 5. FINAL NOTE ALPHABET-WISE TYPEWRITER ----------
-      const noteText1 = "Hey dear Babli! ❤️
+      const finalNoteText = `Hey dear Babli! ❤️
 
-I'm sure you must be wondering why someone almost like a stranger from your friend list made something like this for you. But believe me, there's no particular reason behind it. 😄
+I'm sure you're wondering why someone almost a stranger from your friend list made this for you. Well, honestly, there's no particular reason!
 
-It was just a random thought to surprise someone from my friend list with whatever little creativity I could put together.
-
-You know, sometimes I feel that as engineers, we spend so much time learning, building and solving technical problems that we forget about the simple human side of things. So, I thought, why not use a little bit of that creativity to become a reason for someone's smile, even if it's just for a few minutes?
-
-No special occasion beyond your birthday, no hidden agenda, and absolutely no expectations.
+Just a random thought to surprise someone with my little creativity. Sometimes, beyond all the technical things we engineers build, it's nice to create something just to bring a smile to someone's face.
 
 Just a little human gesture for another human in this fast-moving world.
 
-Anyway, I hope this little surprise brings a smile to your face.
+Hope you like it!
 
-Happy Birthday, Babli! Keep smiling and keep shining. 🌻";
-      const noteText2 = "Have an amazing birthday celebration today!";
-      const noteP1 = document.getElementById("final-note-p1");
-      const noteP2 = document.getElementById("final-note-p2");
+Happy Birthday! Keep smiling! 🌻`;
+
+      const finalNoteChars = typeof Intl !== "undefined" && Intl.Segmenter
+        ? Array.from(new Intl.Segmenter("en", { granularity: "grapheme" }).segment(finalNoteText), (s) => s.segment)
+        : Array.from(finalNoteText);
+
+      const finalNoteBody = document.getElementById("final-note-body");
       let noteTimer = null;
 
       function clearFinalNoteAnimation() {
@@ -555,20 +553,14 @@ Happy Birthday, Babli! Keep smiling and keep shining. 🌻";
 
       function startFinalNoteAnimation() {
         clearFinalNoteAnimation();
-        noteP1.textContent = "";
-        noteP2.textContent = "";
-        let i1 = 0;
-        let i2 = 0;
+        finalNoteBody.textContent = "";
+        let idx = 0;
 
         function typeNext() {
-          if (i1 < noteText1.length) {
-            noteP1.textContent += noteText1.charAt(i1);
-            i1++;
-            noteTimer = setTimeout(typeNext, 28);
-          } else if (i2 < noteText2.length) {
-            noteP2.textContent += noteText2.charAt(i2);
-            i2++;
-            noteTimer = setTimeout(typeNext, 32);
+          if (idx < finalNoteChars.length) {
+            finalNoteBody.textContent += finalNoteChars[idx];
+            idx++;
+            noteTimer = setTimeout(typeNext, 26);
           } else {
             noteTimer = null;
           }
